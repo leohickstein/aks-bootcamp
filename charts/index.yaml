@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  porto-backend:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-01-22T19:41:33.8674519-08:00"
+    description: Backend da aplicacao de controle de navios
+    digest: 481081dcbfa8e7106f46306a5eac25b8e13dfbfe50955a722915364b4fbcaeff
+    name: porto-backend
+    type: application
+    urls:
+    - https://leohickstein.github.io/aks-bootcamp/charts/porto-backend-0.1.0.tgz
+    version: 0.1.0
+  porto-frontend:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-01-22T19:41:33.8714501-08:00"
+    description: A Helm chart for Kubernetes
+    digest: 5bb63594d19b4993c499fd39ef7a539bf89ec28bea8afc570b1fc1b563086739
+    name: porto-frontend
+    type: application
+    urls:
+    - https://leohickstein.github.io/aks-bootcamp/charts/porto-frontend-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-01-22T19:41:33.864452-08:00"
