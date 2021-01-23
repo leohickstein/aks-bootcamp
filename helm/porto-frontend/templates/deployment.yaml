@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}-deployment
+  namespace: {{ default "default" .Release.Namespace }}
+spec:
+  replicas: {{ default 1 .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}-api
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}-api
+    spec:
+      containers:
+      - name: {{ .Values.name }}-api
+        image: maratonaaksacr.azurecr.io/porto-frontend:{{ .Values.image.tag }}
+        resources:
+          {{- toYaml .Values.deployment.resources | nindent 12 }}
+        ports:
+        - containerPort: {{ default 80 .Values.appPort }}
+          name: http
+        volumeMounts:
+          - mountPath: /usr/src/app/dist/config.js
+            name: config
+            subPath: config.js
+      volumes:
+        - name: config
+          configMap:
+            name: {{ default "frontend-config" .Values.configMap.name }}

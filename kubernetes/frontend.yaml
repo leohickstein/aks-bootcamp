@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: porto-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: porto-frontend-api
+  template:
+    metadata:
+      labels:
+        app: porto-frontend-api
+    spec:
+      containers:
+      - name: porto-frontend-api
+        image: maratonaaksacr.azurecr.io/porto-frontend:v1.0.5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+          - mountPath: /usr/src/app/dist/config.js
+            name: config
+            subPath: config.js
+      volumes:
+        - name: config
+          configMap:
+            name: frontend-config
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: porto-frontend-service
+spec:
+  selector:
+    app: porto-frontend-api
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: porto-frontend-ingress
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+    - host: porto-frontend-api.add1d436085848758dc8.eastus.aksapp.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: porto-frontend-service
+              servicePort: http
+            
